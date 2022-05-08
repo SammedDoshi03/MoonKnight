@@ -22,15 +22,23 @@ export const styles = StyleSheet.create({
         //     borderWidth: 0.8,
         //     borderRadius: 6,
     },
+    content: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingHorizontal: 4,
+        paddingVertical: 8,
+    },
     layout: {
         flex: 1,
+        margin: 10,
+        marginBottom: 20,
         justifyContent: 'center',
         alignItems: 'center',
 
     },
     input: {
-        margin: 8,
-        borderRadius: 8,
+        // margin: 8,
+        // borderRadius: 8,
     },
     button: {
         margin: 2,
@@ -104,8 +112,21 @@ export const styles = StyleSheet.create({
         // borderWidth: 1,
         // borderColor: '#e5e5e5',
     },
+    replyMessage: {
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
+        alignItems: 'center',
+        padding: 5,
+        margin: 10,
+        borderRadius: 10,
+        backgroundColor: 'grey',
+        width: '100%',
+        height: '110%',
+        // backgroundColor: '#f5f5f5',
+    },
     innerCard: {
         marginLeft: -10,
+        marginBottom: 3,
         // width: '110%',
         // alignSelf: 'flex-start',
         borderRadius: 10,
@@ -133,6 +154,27 @@ export const styles = StyleSheet.create({
     },
     text: {
         // marginLeft: -10,
+    },
+    name: {
+        fontSize: 14,
+        fontWeight: 'bold',
+        marginLeft: 10,
+        paddingTop: 5,
+
+    },
+    image: {
+        width: 250,
+        height: 175,
+    },
+    doc: {
+        // alignSelf: 'center',
+        paddingRight: 8,
+        // flex: 1,
+        // flexDirection: 'row',
+        // justifyContent: 'flex-start',
+        // alignItems: 'center',
+        // margin: 10,
+        // borderRadius: 10,
     },
 
 });

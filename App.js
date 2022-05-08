@@ -7,17 +7,6 @@
  */
 
 import React from 'react';
-
-import { SafeAreaView, ScrollView, StatusBar,StyleSheet, Text,useColorScheme,View,} from 'react-native';
-
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-
 import Chats from './src/components/screens/Chats';
 import StarredMessages from './src/components/StarredMessages';
 
@@ -42,6 +31,7 @@ const Stack = createNativeStackNavigator();
 const ChatScreens = (props) => (
   // <SafeAreaView  style={{ flex: 1 }}>
   <Stack.Navigator initialRouteName='Chats'>
+     {/* <Stack.Screen name='Chats Screen' component={ChatScreen}   initialParams={{ ...props }} options={{ headerShown: false }}  /> */}
      <Stack.Screen name='Chats' component={Chats}   initialParams={{ ...props }} options={{ headerShown: false }}  />
      <Stack.Screen name='Starred Messages' component={StarredMessages} initialParams={{ ...props }}  options={{ headerShown: false }}  />
      <Stack.Screen name='Group Profile' component={GroupProfile} initialParams={{ ...props }}  options={{ headerShown: false }}  />
@@ -49,34 +39,6 @@ const ChatScreens = (props) => (
   // </SafeAreaView>
 )
 
-
-const Start = () => {
-
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
-
-     return (
-      
-       <NavigationContainer>
-        
-          {/* <SafeAreaView style={backgroundStyle}>
-            <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-            <ScrollView
-              contentInsetAdjustmentBehavior="automatic"
-              style={backgroundStyle}> */}
-              {/* <Header /> */}
-              {/* <ChatScreen/> */}
-                <ChatScreens/> :
-            {/* </ScrollView>
-          </SafeAreaView> */}
-         
-       </NavigationContainer>
-       
-     );
-}
 
 const AppNavigator = () => (
   <NavigationContainer>
@@ -90,35 +52,14 @@ const App = () =>  {
     <>
       <IconRegistry icons={EvaIconsPack}/>
       <Provider store={store}>
-          <PersistGate persistor={persistor}>
-      <ApplicationProvider {...eva} theme={eva.light}>
-        
-            <AppNavigator/>
-         
-      </ApplicationProvider>
-      </PersistGate>
-        </Provider>
+        <PersistGate persistor={persistor}>
+          <ApplicationProvider {...eva} theme={eva.light}>
+                <AppNavigator/>
+          </ApplicationProvider>
+        </PersistGate>
+      </Provider>
     </>
   );
 };
-
-const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-});
 
 export default App;

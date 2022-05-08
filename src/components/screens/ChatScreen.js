@@ -1,67 +1,87 @@
-import React from 'react'
-import { View, Text, Header , Image, Dimensions } from 'react-native'
-import { Appbar, Menu, Divider, Provider  } from 'react-native-paper';
+import React, {
+    useState,
+    useEffect,
+    useLayoutEffect,
+    useCallback
+  } from 'react';
+  import { TouchableOpacity, Text } from 'react-native';
+  import { GiftedChat } from 'react-native-gifted-chat';
+  import {
+    collection,
+    addDoc,
+    orderBy,
+    query,
+    onSnapshot
+  } from 'firebase/firestore';
+  import { signOut } from 'firebase/auth';
+  import { auth, database } from '../../config/firebaseConfig';
+  import { useNavigation } from '@react-navigation/native';
+  import AntDesign from "react-native-vector-icons/AntDesign"
+//   import colors from '../colors';
 
-const ChatScreen = () => {
 
-    const _goBack = () => console.log('Went back');
+  export default function Chat() {
 
-  const _handleSearch = () => console.log('Searching');
+    const [messages, setMessages] = useState([]);
+    const navigation = useNavigation();
 
-  const _handleMore = () => console.log('Shown more');
-  const [visible, setVisible] = React.useState(false);
-  const openMenu = () => setVisible(true);
-  const closeMenu = () => setVisible(false);
+    useLayoutEffect(() => {
 
-  return (
-   <>
-    <Provider>
-    <Appbar.Header dark={true} style={{backgroundColor:"black"}}>
-      <Appbar.BackAction onPress={_goBack} />
-      <Appbar.Content
-                title={
-                   <Image 
-                        // source={require('../../assests/demo.png')}
-                        source={{uri: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80"}} 
-                        style={{
-                            width: 50,
-                            height:40,
-                            // borderRadius:30,
-                            borderWidth:2,
-                            borderColor:"white",
-                            // justifyContent:"flex-start",
-                            
-                        }}
-                    />}
-                // titleStyle={{backgroundColor: "red",}}
-                style={{width:10,backgroundColor:"red", borderRadius:20,alignSelf:'center'}}
-            />
-            <Text style={{color:"white",fontSize:20}}> User.name</Text> 
-      <Appbar.Action icon="phone" onPress={_handleSearch} />
-      <Appbar.Action icon="video" onPress={_handleSearch} />
-      {/* <Appbar.Action icon="dots-vertical" onPress={_handleMore} /> */}
-      <Menu
-          visible={visible}
-          onDismiss={closeMenu}
-          anchor={
-            <Appbar.Action icon="dots-vertical" color="white" onPress={openMenu} />
-          }>
-          <Menu.Item onPress={() => {console.log('Option 1 was pressed')}} title="View Starred Messages" />
-          <Menu.Item onPress={() => {console.log('Option 2 was pressed')}} title="Delete Conversation" />
-        </Menu>
-    </Appbar.Header>
-   <View style={{flex:1}}>
-        <View style={{flex:0.8}}>
-            <Text>ChatScreen</Text>
-        </View>
-        <View style ={{flex:0.2}}>
-            
-        </View>     
-   </View>
-   
-   </Provider>
-   </>
-  )
+        const collectionRef = collection(database, 'chats');
+        const q = query(collectionRef, orderBy('createdAt', 'desc'));
+
+    const unsubscribe = onSnapshot(q, querySnapshot => {
+        console.log('querySnapshot unsusbscribe');
+          setMessages(
+            querySnapshot.docs.map(doc => ({
+              _id: doc.data()._id,
+              createdAt: doc.data().createdAt.toDate(),
+              text: doc.data().text,
+              user: doc.data().user
+            }))
+          );
+        });
+    return unsubscribe;
+      }, []);
+
+    const onSend = useCallback((messages = []) => {
+        setMessages(previousMessages =>
+          GiftedChat.append(previousMessages, messages)
+        );
+        // setMessages([...messages, ...messages]);
+        const { _id, createdAt, text, user } = messages[0];    
+        addDoc(collection(database, 'chats'), {
+          _id,
+          createdAt,
+          text,
+          user
+        });
+      }, []);
+
+      return (
+        // <>
+        //   {messages.map(message => (
+        //     <Text key={message._id}>{message.text}</Text>
+        //   ))}
+        // </>
+        <GiftedChat
+          messages={messages}
+          showAvatarForEveryMessage={false}
+          showUserAvatar={false}
+          onSend={messages => onSend(messages)}
+          messagesContainerStyle={{
+            backgroundColor: '#fff'
+          }}
+          textInputStyle={{
+            backgroundColor: '#fff',
+            borderRadius: 20,
+          }}
+            placeholder="Type a message..."
+            isKeyboardInternallyHandled={true}
+        //   user={{
+        //     _id: auth?.currentUser?.email,
+        //     avatar: 'https://i.pravatar.cc/300'
+        //   }}
+        />
+      );
 }
-
-export default ChatScreen

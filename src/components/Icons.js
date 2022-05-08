@@ -35,5 +35,8 @@ export const SendIcon = (props) => (
 export const MenuIcon = (props) => (
     <Icon {...props} name='more-vertical'/>
   );
+export const DocIcon = (props) => (
+    <Icon {...props} name='archive'/>
+  );
 
 export default Icons;

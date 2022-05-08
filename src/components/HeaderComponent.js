@@ -1,6 +1,8 @@
 import React from 'react'
 import {Divider, Card, Layout, Icon, Input, Text, Button,  Avatar, MenuItem, OverflowMenu } from '@ui-kitten/components';
 import { styles } from '../assests/styles';
+import { Alert } from 'react-native';
+import { deleteChat } from './apis';
 
 const list = [
     // {
@@ -18,7 +20,8 @@ const list = [
 ]
 const HeaderComponent = (props) => {
   
-    const { navigation  } = props;
+    const { navigation,headerInfo  } = props;
+    // console.log("HeaderInfo -", headerInfo);
 
     const navigateDetails = () => {
       navigation.navigate('Starred Messages');
@@ -30,7 +33,7 @@ const HeaderComponent = (props) => {
     
     const onItemSelect = (index) => {
     //   setSelectedIndex(index);
-        console.log(index);
+        // console.log(index);
         setVisible(false);
     };
 
@@ -42,6 +45,21 @@ const HeaderComponent = (props) => {
             accessoryLeft={ <Icon name='more-vertical-outline'/>}>
         </Button>
         );
+
+        const deleteConversation = () => {
+            Alert.alert(
+                'Delete Conversation',
+                'Are you sure you want to delete this conversation?',
+                [
+                    {
+                        text: 'Cancel',
+                        onPress: () => {},
+                        style: 'cancel',
+                    },
+                    {text: 'OK', onPress: () => deleteChat(headerInfo._id)},
+                ],
+            );
+        }
 
     return (
    
@@ -59,10 +77,10 @@ const HeaderComponent = (props) => {
             <Text 
             category='h6' 
             onPress= {() => {
-                list[0].type === 'isGroup' ? navigation.navigate('Group Profile') : {};
+                headerInfo[0].type === 'group' ? navigation.navigate('Group Profile') : {};
             }}
-            > {list[0].name} </Text>
-            {list[0].type === 'isGroup' ? <Text category='s1'> {list[0].members.length} Members </Text> : <Text appearance='hint'>online </Text>}
+            > {headerInfo[0].title} </Text>
+            {headerInfo[0].type === 'group' ? <Text category='s1'> {headerInfo[0].users.length} Members </Text> : <Text appearance='hint'>online </Text>}
            
             </Layout>
         <Layout style={styles.headerRight}>
@@ -77,7 +95,7 @@ const HeaderComponent = (props) => {
                 onSelect={onItemSelect}
                 onBackdropPress={() => setVisible(false)}>
                 <MenuItem title='View starred messages' anchor={navigateDetails} onPress={navigateDetails}/>
-                <MenuItem title='Delete conversation'/>
+                <MenuItem title='Delete conversation' onPress={()=> {deleteConversation()}}/>
             </OverflowMenu>
         </Layout>
     </Layout>

@@ -2,6 +2,9 @@ import React from 'react';
 import { StyleSheet, ScrollView } from 'react-native';
 import { Avatar,Button, Divider, Icon, List, ListItem, TopNavigation, TopNavigationAction, OverflowMenu, MenuItem } from '@ui-kitten/components';
 import { SearchIcon, BackIcon, SettingsIcon, MenuIcon } from './Icons';
+import { useSelector, useDispatch } from 'react-redux';
+import { removeStarredMessages } from '../Redux/actions/starredMessagesActions';
+import Snackbar from 'react-native-snackbar';
 
 
 const data = new Array(8).fill({
@@ -10,6 +13,35 @@ const data = new Array(8).fill({
 });
 
 const StarredMessages = (props) => {
+
+  const starredMessages = useSelector(state => state.starredMessageReducer.starredMessages);
+
+  const data2 = starredMessages.map((ele, index) => {
+    return {
+      title: ele.name,
+      description: ele.message,
+      profile: ele.profile,
+      _id : ele.id,
+    }
+  })
+
+
+  const dispatch = useDispatch();
+
+  const removeData = (ele) => {
+    dispatch(removeStarredMessages(ele));
+    // setVisible(false);
+    Snackbar.show({
+      text: 'Removed to Starred Messages',
+      duration: Snackbar.LENGTH_SHORT,
+      action: {
+        text: 'Okay',
+        textColor: 'green',
+        onPress: () => { Snackbar.dismiss() },
+      },
+    });
+    }
+  
 
     const { navigation  } = props;
     
@@ -43,8 +75,8 @@ const StarredMessages = (props) => {
         <TopNavigationAction icon={BackIcon} onPress={navigateBack}/>
       );
     
-      const renderItemAccessory = (props) => (
-        <Button size='tiny'>View Message</Button>
+      const renderItemAccessory = (item) => (
+        <Button size='small' onPress={() => {removeData(item)}}> Remove Message</Button>
       );
     
       const renderItemIcon = (props) => (
@@ -54,10 +86,14 @@ const StarredMessages = (props) => {
       const renderItem = ({ item, index }) => (
        
         <ListItem
-          title={`${item.title} ${index + 1}`}
-          description={`${item.description} ${index + 1}`}
-          accessoryLeft={renderItemIcon}
-          accessoryRight={renderItemAccessory}
+          key={index}
+          title={`${item.title} `}
+          description={`${item.description}`}
+          accessoryLeft={
+            renderItemIcon
+          // <Avatar style={styles.avatar} size='large' source={item.profile}/>
+        }
+          accessoryRight={renderItemAccessory(item)}
         />
        
       );
@@ -74,7 +110,7 @@ const StarredMessages = (props) => {
           <Divider/>
           <List
             style={styles.container}
-            data={data}
+            data={data2}
             renderItem={renderItem}
           />
         </React.Fragment>

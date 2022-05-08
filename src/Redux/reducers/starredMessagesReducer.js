@@ -2,24 +2,34 @@ import { ActionTypes } from "../constants/action-types";
 
 const initialState = {
     starredMessages: [{
-        id: 1,
-        name: 'John Doe',
-        profile: require('../../assests/demo.png'),
-        message: "Someting"
-    }, ]
+            id: 1,
+            sid: 1,
+            name: 'John Doe',
+            profile: require('../../assests/demo.png'),
+            message: "Someting"
+        },
+        {
+            id: 2,
+            sid: 2,
+            name: 'John wick',
+            profile: require('../../assests/demo.png'),
+            message: "Pencil"
+        },
+    ]
 };
 
 export const starredMessageReducer = (state = initialState, { type, payload }) => {
     switch (type) {
         case ActionTypes.SET_STARRED_MESSAGES:
-            if (state.starredMessages.find(starredMessages => starredMessage.id === payload.id)) {
+            if (state.starredMessages.find(data => data.id === payload.id)) {
                 return state;
             }
             return {...state, starredMessages: [...state.starredMessages, payload] };
 
         case ActionTypes.REMOVE_STARRED_MESSAGES:
+            // console.log("payload", payload);
             return {...state,
-                articles: removeStarredMessages(state.starredMessages, payload)
+                starredMessages: removeStarredMessages(state.starredMessages, payload)
             };
         default:
             return state;
@@ -27,5 +37,6 @@ export const starredMessageReducer = (state = initialState, { type, payload }) =
 }
 
 const removeStarredMessages = (starredMessages, payload) => {
-    return starredMessages.filter(starredMessage => starredMessage.id !== payload.id);
+    const newStarredMessages = starredMessages.filter(data => data.id !== payload._id);
+    return newStarredMessages;
 }
