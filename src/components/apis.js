@@ -26,7 +26,7 @@ const deleteMessage = (id) => {
 }
 
 
-const addMessage = (message, value, msgType, parent = "") => {
+const addMessage = (message, value, msgType, parent) => {
     const data = {
         ...message,
         value,

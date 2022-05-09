@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useRef,useCallback } from 'react'
 
-import { ScrollView,View } from 'react-native';
+import { ScrollView,View, ActivityIndicator  } from 'react-native';
 import { useSelector,useDispatch } from 'react-redux';
 
 import { Layout, Input, Text, Button } from '@ui-kitten/components';
 import Message from './Messages'
 import { SmileIcon , AttachmentIcon, SendIcon } from '../Icons' 
 import { styles } from '../../assests/styles';
+import LoadingComponent from '../LoadingComponent';
 
 import HeaderComponent from '../HeaderComponent';
 
@@ -34,7 +35,7 @@ const Chats = (props) => {
     useEffect(()=> {
         const timer = setTimeout(() => {
             fetchData();
-          }, 10000);
+          }, 2000);
       
           return () => clearTimeout(timer);
         // timer for 1 mins 
@@ -104,12 +105,13 @@ const Chats = (props) => {
 
     return (
         <>
+        {messages ? 
         <Layout style={styles.mainContainer}>
            {messages ?  <HeaderComponent headerInfo={messages} navigation={props.navigation}/> : null}
         
         
             <Layout style={styles.cardContainer} level='4'>
-                <ScrollView>
+                <ScrollView >
                     {messages? <Message messages={messages} />: <></>}
                 </ScrollView> 
             </Layout>
@@ -149,6 +151,7 @@ const Chats = (props) => {
                 />
             </Layout>
         </Layout>
+       : <LoadingComponent/>}
         </>
     )
 }

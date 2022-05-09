@@ -101,7 +101,7 @@ const SingleMessageComponet = (props) => {
                 <MenuItem title='Delete' onPress={() => {deleteMsg(ele._id)}}/>
                 {/* <MenuItem title='Details'/> */}
             </OverflowMenu>
-            <Text style={styles.time}>{format(ele.time)}</Text>
+            <Text style={styles.time}>{format(new Date(ele.time))}</Text>
         </Card>
       </>
     )

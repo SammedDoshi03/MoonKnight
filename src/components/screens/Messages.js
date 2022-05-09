@@ -7,6 +7,7 @@ const Messages = (props) => {
     
     const messages = props.messages ?? [];
     const newList = messages.length > 0 ? messages[0]["messages"]: [];
+    console.log("newList", messages);
 
    return newList.map((message, index) => {
        return (
