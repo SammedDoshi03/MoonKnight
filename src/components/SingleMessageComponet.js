@@ -5,7 +5,7 @@ import { styles } from '../assests/styles';
 import { useSelector,useDispatch } from 'react-redux';
 import { setStarredMessages, removeStarredMessages } from '../Redux/actions/starredMessagesActions';
 import Snackbar from 'react-native-snackbar';
-import { format } from 'timeago.js';
+import { format,render } from 'timeago.js';
 import { deleteMessage } from './apis';
 import { DocIcon } from './Icons'
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -101,7 +101,8 @@ const SingleMessageComponet = (props) => {
                 <MenuItem title='Delete' onPress={() => {deleteMsg(ele._id)}}/>
                 {/* <MenuItem title='Details'/> */}
             </OverflowMenu>
-            <Text style={styles.time}>{format(new Date(ele.time))}</Text>
+            
+            <Text style={styles.time}>{format((new Date(ele.createdAt)).toUTCString())}</Text>
         </Card>
       </>
     )
